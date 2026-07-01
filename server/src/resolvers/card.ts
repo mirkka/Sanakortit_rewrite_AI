@@ -13,7 +13,7 @@ const getCardOrThrow = async (
 ) => {
   const result = await dynamodb.send(
     new GetCommand({
-      TableName: process.env.CARDS_TABLE_NAME!,
+      TableName: 'sanakortit-cards',
       Key: { deckId, cardId },
     }),
   )
@@ -31,13 +31,13 @@ export const cardQueryResolvers: Pick<QueryResolvers, 'getCardsForDeck'> = {
   getCardsForDeck: async (_, { userId, deckId }, { dynamodb }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
 
-    const items: Array<{ cardId: string; deckId: string; text: string; textTranslation: string; weight: number }> = []
+    const items: Array<{ cardId: string; deckId: string; text: string; textTranslation: string; weight: number; createdAt: string; updatedAt: string }> = []
     let lastKey: Record<string, unknown> | undefined
 
     do {
       const result = await dynamodb.send(
         new QueryCommand({
-          TableName: process.env.CARDS_TABLE_NAME!,
+          TableName: 'sanakortit-cards',
           KeyConditionExpression: 'deckId = :deckId',
           ExpressionAttributeValues: { ':deckId': deckId },
           ExclusiveStartKey: lastKey,
@@ -45,6 +45,7 @@ export const cardQueryResolvers: Pick<QueryResolvers, 'getCardsForDeck'> = {
       )
 
       items.push(...((result.Items ?? []) as typeof items))
+
       lastKey = result.LastEvaluatedKey as Record<string, unknown> | undefined
     } while (lastKey)
 
@@ -52,21 +53,22 @@ export const cardQueryResolvers: Pick<QueryResolvers, 'getCardsForDeck'> = {
   },
 }
 
-export const cardMutationResolvers: Pick<MutationResolvers, 'addCard' | 'deleteCard' | 'updateCard'> = {
+export const cardMutationResolvers: Pick<MutationResolvers, 'addCard' | 'deleteCard' | 'updateCard' | 'markCardDifficulty'> = {
   addCard: async (_, { userId, deckId, text, textTranslation }, { dynamodb }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
 
     const cardId = uuidv4()
     const weight = DEFAULT_WEIGHT
+    const now = new Date().toISOString()
 
     await dynamodb.send(
       new PutCommand({
-        TableName: process.env.CARDS_TABLE_NAME!,
-        Item: { deckId, cardId, text, textTranslation, weight },
+        TableName: 'sanakortit-cards',
+        Item: { deckId, cardId, text, textTranslation, weight, createdAt: now, updatedAt: now },
       }),
     )
 
-    return { cardId, deckId, text, textTranslation, weight }
+    return { cardId, deckId, text, textTranslation, weight, createdAt: now, updatedAt: now }
   },
 
   deleteCard: async (_, { userId, deckId, cardId }, { dynamodb }) => {
@@ -75,7 +77,7 @@ export const cardMutationResolvers: Pick<MutationResolvers, 'addCard' | 'deleteC
 
     await dynamodb.send(
       new DeleteCommand({
-        TableName: process.env.CARDS_TABLE_NAME!,
+        TableName: 'sanakortit-cards',
         Key: { deckId, cardId },
       }),
     )
@@ -83,20 +85,56 @@ export const cardMutationResolvers: Pick<MutationResolvers, 'addCard' | 'deleteC
     return cardId
   },
 
+  markCardDifficulty: async (_, { userId, deckId, cardId, weight }, { dynamodb }) => {
+    await getDeckOrThrow(dynamodb, deckId, userId)
+    const existing = await getCardOrThrow(dynamodb, deckId, cardId)
+
+    const updatedAt = new Date().toISOString()
+
+    await dynamodb.send(
+      new UpdateCommand({
+        TableName: 'sanakortit-cards',
+        Key: { deckId, cardId },
+        UpdateExpression: 'SET weight = :weight, updatedAt = :updatedAt',
+        ExpressionAttributeValues: { ':weight': weight, ':updatedAt': updatedAt },
+      }),
+    )
+
+    return {
+      cardId,
+      deckId,
+      text: existing.text as string,
+      textTranslation: existing.textTranslation as string,
+      weight,
+      createdAt: existing.createdAt as string,
+      updatedAt,
+    }
+  },
+
   updateCard: async (_, { userId, deckId, cardId, text, textTranslation }, { dynamodb }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
     const existing = await getCardOrThrow(dynamodb, deckId, cardId)
 
+    const updatedAt = new Date().toISOString()
+
     await dynamodb.send(
       new UpdateCommand({
-        TableName: process.env.CARDS_TABLE_NAME!,
+        TableName: 'sanakortit-cards',
         Key: { deckId, cardId },
-        UpdateExpression: 'SET #text = :text, textTranslation = :textTranslation',
+        UpdateExpression: 'SET #text = :text, textTranslation = :textTranslation, updatedAt = :updatedAt',
         ExpressionAttributeNames: { '#text': 'text' },
-        ExpressionAttributeValues: { ':text': text, ':textTranslation': textTranslation },
+        ExpressionAttributeValues: { ':text': text, ':textTranslation': textTranslation, ':updatedAt': updatedAt },
       }),
     )
 
-    return { cardId, deckId, text, textTranslation, weight: existing.weight as number }
+    return {
+      cardId,
+      deckId,
+      text,
+      textTranslation,
+      weight: existing.weight as number,
+      createdAt: existing.createdAt as string,
+      updatedAt,
+    }
   },
 }

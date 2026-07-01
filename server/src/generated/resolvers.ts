@@ -15,16 +15,23 @@ export type Scalars = {
 export type Card = {
   __typename?: 'Card';
   cardId: Scalars['ID']['output'];
+  createdAt: Scalars['String']['output'];
   deckId: Scalars['ID']['output'];
   text: Scalars['String']['output'];
   textTranslation: Scalars['String']['output'];
+  updatedAt: Scalars['String']['output'];
   weight: Scalars['Int']['output'];
 };
 
 export type Deck = {
   __typename?: 'Deck';
+  createdAt: Scalars['String']['output'];
   deckId: Scalars['ID']['output'];
+  lastStudied?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
+  numberOfCards: Scalars['Int']['output'];
+  status?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['String']['output'];
   userId: Scalars['ID']['output'];
 };
 
@@ -34,7 +41,10 @@ export type Mutation = {
   createDeck: Deck;
   deleteCard: Scalars['ID']['output'];
   deleteDeck: Scalars['ID']['output'];
+  markCardDifficulty: Card;
+  resetDeck: Deck;
   updateCard: Card;
+  updateDeck: Deck;
 };
 
 
@@ -65,6 +75,20 @@ export type MutationDeleteDeckArgs = {
 };
 
 
+export type MutationMarkCardDifficultyArgs = {
+  cardId: Scalars['ID']['input'];
+  deckId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+  weight: Scalars['Int']['input'];
+};
+
+
+export type MutationResetDeckArgs = {
+  deckId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateCardArgs = {
   cardId: Scalars['ID']['input'];
   deckId: Scalars['ID']['input'];
@@ -73,12 +97,18 @@ export type MutationUpdateCardArgs = {
   userId: Scalars['ID']['input'];
 };
 
+
+export type MutationUpdateDeckArgs = {
+  deckId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
   getCardsForDeck: Array<Card>;
   getDeck: Deck;
   getDecks: Array<Deck>;
-  hello?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -195,15 +225,22 @@ export type ResolversParentTypes = {
 
 export type CardResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Card'] = ResolversParentTypes['Card']> = {
   cardId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   deckId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   text?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   textTranslation?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   weight?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
 };
 
 export type DeckResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Deck'] = ResolversParentTypes['Deck']> = {
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   deckId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  lastStudied?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  numberOfCards?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
 };
 
@@ -212,14 +249,16 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
   createDeck?: Resolver<ResolversTypes['Deck'], ParentType, ContextType, RequireFields<MutationCreateDeckArgs, 'name' | 'userId'>>;
   deleteCard?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteCardArgs, 'cardId' | 'deckId' | 'userId'>>;
   deleteDeck?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationDeleteDeckArgs, 'deckId' | 'userId'>>;
+  markCardDifficulty?: Resolver<ResolversTypes['Card'], ParentType, ContextType, RequireFields<MutationMarkCardDifficultyArgs, 'cardId' | 'deckId' | 'userId' | 'weight'>>;
+  resetDeck?: Resolver<ResolversTypes['Deck'], ParentType, ContextType, RequireFields<MutationResetDeckArgs, 'deckId' | 'userId'>>;
   updateCard?: Resolver<ResolversTypes['Card'], ParentType, ContextType, RequireFields<MutationUpdateCardArgs, 'cardId' | 'deckId' | 'text' | 'textTranslation' | 'userId'>>;
+  updateDeck?: Resolver<ResolversTypes['Deck'], ParentType, ContextType, RequireFields<MutationUpdateDeckArgs, 'deckId' | 'name' | 'userId'>>;
 };
 
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getCardsForDeck?: Resolver<Array<ResolversTypes['Card']>, ParentType, ContextType, RequireFields<QueryGetCardsForDeckArgs, 'deckId' | 'userId'>>;
   getDeck?: Resolver<ResolversTypes['Deck'], ParentType, ContextType, RequireFields<QueryGetDeckArgs, 'deckId' | 'userId'>>;
   getDecks?: Resolver<Array<ResolversTypes['Deck']>, ParentType, ContextType, RequireFields<QueryGetDecksArgs, 'userId'>>;
-  hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = GraphQLContext> = {

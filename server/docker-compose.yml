@@ -6,6 +6,12 @@ services:
     volumes:
       - dynamodb-data:/home/dynamodblocal
     command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/home/dynamodblocal"]
+    networks:
+      - sanakortit-local
+
+networks:
+  sanakortit-local:
+    name: sanakortit-local
 
 volumes:
   dynamodb-data:

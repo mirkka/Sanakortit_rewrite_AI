@@ -14,10 +14,24 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query Hello {\n    hello\n  }\n": typeof types.HelloDocument,
+    "\n  mutation AddCard($userId: ID!, $deckId: ID!, $text: String!, $textTranslation: String!) {\n    addCard(userId: $userId, deckId: $deckId, text: $text, textTranslation: $textTranslation) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.AddCardDocument,
+    "\n  query GetCardsForDeck($userId: ID!, $deckId: ID!) {\n    getCardsForDeck(userId: $userId, deckId: $deckId) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetCardsForDeckDocument,
+    "\n  mutation UpdateCard($userId: ID!, $deckId: ID!, $cardId: ID!, $text: String!, $textTranslation: String!) {\n    updateCard(userId: $userId, deckId: $deckId, cardId: $cardId, text: $text, textTranslation: $textTranslation) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.UpdateCardDocument,
+    "\n  mutation MarkCardDifficulty($userId: ID!, $deckId: ID!, $cardId: ID!, $weight: Int!) {\n    markCardDifficulty(userId: $userId, deckId: $deckId, cardId: $cardId, weight: $weight) {\n      cardId\n      updatedAt\n    }\n  }\n": typeof types.MarkCardDifficultyDocument,
+    "\n  query GetDecks($userId: ID!) {\n    getDecks(userId: $userId) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      status\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetDecksDocument,
+    "\n  mutation ResetDeck($userId: ID!, $deckId: ID!) {\n    resetDeck(userId: $userId, deckId: $deckId) {\n      deckId\n      status\n    }\n  }\n": typeof types.ResetDeckDocument,
+    "\n  mutation UpdateDeck($userId: ID!, $deckId: ID!, $name: String!) {\n    updateDeck(userId: $userId, deckId: $deckId, name: $name) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.UpdateDeckDocument,
+    "\n  mutation CreateDeck($userId: ID!, $name: String!) {\n    createDeck(userId: $userId, name: $name) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.CreateDeckDocument,
 };
 const documents: Documents = {
-    "\n  query Hello {\n    hello\n  }\n": types.HelloDocument,
+    "\n  mutation AddCard($userId: ID!, $deckId: ID!, $text: String!, $textTranslation: String!) {\n    addCard(userId: $userId, deckId: $deckId, text: $text, textTranslation: $textTranslation) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n": types.AddCardDocument,
+    "\n  query GetCardsForDeck($userId: ID!, $deckId: ID!) {\n    getCardsForDeck(userId: $userId, deckId: $deckId) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetCardsForDeckDocument,
+    "\n  mutation UpdateCard($userId: ID!, $deckId: ID!, $cardId: ID!, $text: String!, $textTranslation: String!) {\n    updateCard(userId: $userId, deckId: $deckId, cardId: $cardId, text: $text, textTranslation: $textTranslation) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n": types.UpdateCardDocument,
+    "\n  mutation MarkCardDifficulty($userId: ID!, $deckId: ID!, $cardId: ID!, $weight: Int!) {\n    markCardDifficulty(userId: $userId, deckId: $deckId, cardId: $cardId, weight: $weight) {\n      cardId\n      updatedAt\n    }\n  }\n": types.MarkCardDifficultyDocument,
+    "\n  query GetDecks($userId: ID!) {\n    getDecks(userId: $userId) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      status\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetDecksDocument,
+    "\n  mutation ResetDeck($userId: ID!, $deckId: ID!) {\n    resetDeck(userId: $userId, deckId: $deckId) {\n      deckId\n      status\n    }\n  }\n": types.ResetDeckDocument,
+    "\n  mutation UpdateDeck($userId: ID!, $deckId: ID!, $name: String!) {\n    updateDeck(userId: $userId, deckId: $deckId, name: $name) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      createdAt\n      updatedAt\n    }\n  }\n": types.UpdateDeckDocument,
+    "\n  mutation CreateDeck($userId: ID!, $name: String!) {\n    createDeck(userId: $userId, name: $name) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      createdAt\n      updatedAt\n    }\n  }\n": types.CreateDeckDocument,
 };
 
 /**
@@ -37,7 +51,35 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Hello {\n    hello\n  }\n"): (typeof documents)["\n  query Hello {\n    hello\n  }\n"];
+export function graphql(source: "\n  mutation AddCard($userId: ID!, $deckId: ID!, $text: String!, $textTranslation: String!) {\n    addCard(userId: $userId, deckId: $deckId, text: $text, textTranslation: $textTranslation) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation AddCard($userId: ID!, $deckId: ID!, $text: String!, $textTranslation: String!) {\n    addCard(userId: $userId, deckId: $deckId, text: $text, textTranslation: $textTranslation) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetCardsForDeck($userId: ID!, $deckId: ID!) {\n    getCardsForDeck(userId: $userId, deckId: $deckId) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetCardsForDeck($userId: ID!, $deckId: ID!) {\n    getCardsForDeck(userId: $userId, deckId: $deckId) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateCard($userId: ID!, $deckId: ID!, $cardId: ID!, $text: String!, $textTranslation: String!) {\n    updateCard(userId: $userId, deckId: $deckId, cardId: $cardId, text: $text, textTranslation: $textTranslation) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateCard($userId: ID!, $deckId: ID!, $cardId: ID!, $text: String!, $textTranslation: String!) {\n    updateCard(userId: $userId, deckId: $deckId, cardId: $cardId, text: $text, textTranslation: $textTranslation) {\n      cardId\n      deckId\n      text\n      textTranslation\n      weight\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation MarkCardDifficulty($userId: ID!, $deckId: ID!, $cardId: ID!, $weight: Int!) {\n    markCardDifficulty(userId: $userId, deckId: $deckId, cardId: $cardId, weight: $weight) {\n      cardId\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation MarkCardDifficulty($userId: ID!, $deckId: ID!, $cardId: ID!, $weight: Int!) {\n    markCardDifficulty(userId: $userId, deckId: $deckId, cardId: $cardId, weight: $weight) {\n      cardId\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  query GetDecks($userId: ID!) {\n    getDecks(userId: $userId) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      status\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetDecks($userId: ID!) {\n    getDecks(userId: $userId) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      status\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation ResetDeck($userId: ID!, $deckId: ID!) {\n    resetDeck(userId: $userId, deckId: $deckId) {\n      deckId\n      status\n    }\n  }\n"): (typeof documents)["\n  mutation ResetDeck($userId: ID!, $deckId: ID!) {\n    resetDeck(userId: $userId, deckId: $deckId) {\n      deckId\n      status\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation UpdateDeck($userId: ID!, $deckId: ID!, $name: String!) {\n    updateDeck(userId: $userId, deckId: $deckId, name: $name) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateDeck($userId: ID!, $deckId: ID!, $name: String!) {\n    updateDeck(userId: $userId, deckId: $deckId, name: $name) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n  mutation CreateDeck($userId: ID!, $name: String!) {\n    createDeck(userId: $userId, name: $name) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation CreateDeck($userId: ID!, $name: String!) {\n    createDeck(userId: $userId, name: $name) {\n      deckId\n      name\n      userId\n      numberOfCards\n      lastStudied\n      createdAt\n      updatedAt\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

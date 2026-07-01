@@ -7,11 +7,12 @@
     "watch": "tsc -w",
     "cdk": "cdk",
     "synth": "cdk synth --quiet",
+    "synth:local": "cdk synth --quiet -c localDynamoEndpoint=http://dynamodb-local:8000",
     "deploy": "cdk deploy",
     "diff": "cdk diff",
-    "start:lambda": "npm run synth && sam local start-api -t cdk.out/SanakortitStack.template.json --port 4000",
+    "watch:synth": "nodemon --watch src --ext ts,graphql --exec 'npm run synth:local && sam local start-api -t cdk.out/SanakortitStack.template.json --port 4000 --docker-network sanakortit-local'",
     "setup:local-db": "ts-node scripts/setup-local-db.ts",
-    "start:local": "docker compose up -d && npm run setup:local-db && npm run start:lambda"
+    "start:local": "docker compose up -d && npm run setup:local-db && npm run watch:synth"
   },
   "engines": {
     "node": ">=24"
@@ -39,7 +40,9 @@
     "@types/node": "^24.0.0",
     "@types/uuid": "^10.0.0",
     "aws-cdk": "^2.0.0",
+    "concurrently": "^10.0.3",
     "esbuild": "^0.25.0",
+    "nodemon": "^3.1.14",
     "ts-node": "^10.0.0",
     "typescript": "^5.0.0"
   }

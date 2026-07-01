@@ -7,7 +7,6 @@ export { typeDefs }
 
 export const resolvers: Resolvers = {
   Query: {
-    hello: () => 'Hello from Sanakortit!',
     ...deckQueryResolvers,
     ...cardQueryResolvers,
   },

@@ -46,8 +46,7 @@ export class SanakortitStack extends cdk.Stack {
         loader: { '.graphql': 'text' },
       },
       environment: {
-        DECKS_TABLE_NAME: decksTable.tableName,
-        CARDS_TABLE_NAME: cardsTable.tableName,
+        DYNAMODB_ENDPOINT: this.node.tryGetContext('localDynamoEndpoint') ?? '',
       },
     })
 

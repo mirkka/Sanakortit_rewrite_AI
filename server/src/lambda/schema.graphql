@@ -2,6 +2,11 @@ type Deck {
   deckId: ID!
   name: String!
   userId: ID!
+  createdAt: String!
+  updatedAt: String!
+  lastStudied: String
+  numberOfCards: Int!
+  status: String
 }
 
 type Card {
@@ -10,10 +15,11 @@ type Card {
   text: String!
   textTranslation: String!
   weight: Int!
+  createdAt: String!
+  updatedAt: String!
 }
 
 type Query {
-  hello: String
   getDecks(userId: ID!): [Deck!]!
   getDeck(userId: ID!, deckId: ID!): Deck!
   getCardsForDeck(userId: ID!, deckId: ID!): [Card!]!
@@ -21,8 +27,11 @@ type Query {
 
 type Mutation {
   createDeck(userId: ID!, name: String!): Deck!
+  updateDeck(userId: ID!, deckId: ID!, name: String!): Deck!
+  resetDeck(userId: ID!, deckId: ID!): Deck!
   addCard(userId: ID!, deckId: ID!, text: String!, textTranslation: String!): Card!
   deleteDeck(userId: ID!, deckId: ID!): ID!
   deleteCard(userId: ID!, deckId: ID!, cardId: ID!): ID!
   updateCard(userId: ID!, deckId: ID!, cardId: ID!, text: String!, textTranslation: String!): Card!
+  markCardDifficulty(userId: ID!, deckId: ID!, cardId: ID!, weight: Int!): Card!
 }
