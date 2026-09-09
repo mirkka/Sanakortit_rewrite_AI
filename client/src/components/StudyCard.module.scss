@@ -1,0 +1,124 @@
+@use '../styles/variables.scss' as *;
+
+.container {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.topAction {
+  font-size: 13px !important;
+  color: $color-text !important;
+  height: auto !important;
+  border: none !important;
+  background: none !important;
+  padding: 0 !important;
+  gap: 2px !important;
+  box-shadow: none !important;
+
+  &:hover:not(:disabled) {
+    color: $color-text-secondary !important;
+    background: none !important;
+  }
+}
+
+.cardArea {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0 28px 0;
+  padding: 12px 15px;
+  border-radius: $radius;
+  justify-content: center;
+  border: 1px solid $color-border;
+}
+
+.word {
+  font-family: $font-default;
+  font-size: 34px;
+  font-weight: 700;
+  color: $color-text;
+  line-height: 1.2;
+  word-break: break-word;
+  margin: 0;
+}
+
+.divider {
+  margin: 24px 0;
+  border-color: $color-border-weak;
+}
+
+.translation {
+  font-family: $font-default;
+  font-size: 28px;
+  font-weight: 500;
+  color: $color-text-secondary;
+  line-height: 1.3;
+  word-break: break-word;
+  margin: 0;
+}
+
+.bottomBar {
+  padding: 20px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.flipButton {
+  width: 100%;
+  height: 56px;
+  font-size: 17px;
+}
+
+.difficultyGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.difficultyButton {
+  height: 64px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.difficultyDone   { background: $color-bg; border-color: $color-border; color: $color-text; }
+.difficultyGood   { background: $bg-status-good; border-color: $color-border; color: $color-text; }
+.difficultyMedium { background: $bg-status-medium; border-color: $color-border; color: $color-text; }
+.difficultyHard   { background: $bg-status-hard; border-color: $color-border; color: $color-text; }
+
+.finishedContainer {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 32px;
+  max-width: 480px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.finishedEmoji {
+  font-size: 56px;
+}
+
+.finishedText {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}

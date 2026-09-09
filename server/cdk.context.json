@@ -1,0 +1,10 @@
+{
+  "hosted-zone:account=997315957991:domainName=cicushik.com:region=us-east-1": {
+    "Id": "/hostedzone/Z03005561C4FJXA6I9125",
+    "Name": "cicushik.com."
+  },
+  "hosted-zone:account=997315957991:domainName=cicushik.com:region=eu-west-1": {
+    "Id": "/hostedzone/Z03005561C4FJXA6I9125",
+    "Name": "cicushik.com."
+  }
+}

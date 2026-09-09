@@ -1,0 +1,17 @@
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - dynamodb-data:/home/dynamodblocal
+    command: ["-jar", "DynamoDBLocal.jar", "-sharedDb", "-dbPath", "/home/dynamodblocal"]
+    networks:
+      - sanakortit-local
+
+networks:
+  sanakortit-local:
+    name: sanakortit-local
+
+volumes:
+  dynamodb-data:
