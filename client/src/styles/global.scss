@@ -1,0 +1,64 @@
+@use 'variables' as *;
+
+@font-face {
+  font-family: 'Justus Roman';
+  src: url('../assets/fonts/justus-roman.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Justus Roman';
+  src: url('../assets/fonts/justus-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background-color: $color-bg;
+  color: $color-text;
+  font-family: $font-card;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+}
+
+// Underline-only inputs - override Ant Design
+.ant-input-outlined,
+.ant-input-affix-wrapper-outlined {
+  border: none !important;
+  border-bottom: 1.5px solid $color-border !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+
+  &:hover,
+  &:focus,
+  &.ant-input-affix-wrapper-focused {
+    border-bottom-color: $color-text !important;
+    box-shadow: none !important;
+  }
+}
+
+.ant-form-item-label > label {
+  color: $color-text-secondary !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

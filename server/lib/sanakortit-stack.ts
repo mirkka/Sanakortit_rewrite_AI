@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib'
 import * as apigateway from 'aws-cdk-lib/aws-apigateway'
+import * as cognito from 'aws-cdk-lib/aws-cognito'
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb'
 import * as lambda from 'aws-cdk-lib/aws-lambda'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
@@ -10,6 +11,8 @@ export const TABLE_NAMES = {
   DECKS: 'sanakortit-decks',
   CARDS: 'sanakortit-cards',
 }
+
+const AUTH_USER_POOL_ID = 'eu-west-1_Uibfff2QN'
 
 export class SanakortitStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -53,9 +56,30 @@ export class SanakortitStack extends cdk.Stack {
     decksTable.grantReadWriteData(apiLambda)
     cardsTable.grantReadWriteData(apiLambda)
 
-    new apigateway.LambdaRestApi(this, 'SanakortitApi', {
+    const userPool = cognito.UserPool.fromUserPoolId(this, 'AuthUserPool', AUTH_USER_POOL_ID)
+    const authorizer = new apigateway.CognitoUserPoolsAuthorizer(this, 'ApiAuthorizer', {
+      cognitoUserPools: [userPool],
+    })
+
+    const api = new apigateway.LambdaRestApi(this, 'SanakortitApi', {
       handler: apiLambda,
       proxy: true,
+      defaultMethodOptions: {
+        authorizer,
+        authorizationType: apigateway.AuthorizationType.COGNITO,
+      },
+      // CORS preflight (OPTIONS) requests never carry an Authorization header, so they
+      // must bypass the authorizer above — this gives API Gateway its own OPTIONS
+      // method (authorizationType NONE) instead of routing preflight through it.
+      defaultCorsPreflightOptions: {
+        allowOrigins: apigateway.Cors.ALL_ORIGINS,
+        allowMethods: apigateway.Cors.ALL_METHODS,
+        allowHeaders: apigateway.Cors.DEFAULT_HEADERS,
+      },
+    })
+
+    new cdk.CfnOutput(this, 'GraphqlApiUrl', {
+      value: api.url,
     })
   }
 }

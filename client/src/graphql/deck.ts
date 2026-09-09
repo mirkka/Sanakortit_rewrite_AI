@@ -1,8 +1,8 @@
 import { graphql } from '../generated/gql'
 
 export const GET_DECKS = graphql(`
-  query GetDecks($userId: ID!) {
-    getDecks(userId: $userId) {
+  query GetDecks {
+    getDecks {
       deckId
       name
       userId
@@ -16,8 +16,8 @@ export const GET_DECKS = graphql(`
 `)
 
 export const RESET_DECK = graphql(`
-  mutation ResetDeck($userId: ID!, $deckId: ID!) {
-    resetDeck(userId: $userId, deckId: $deckId) {
+  mutation ResetDeck($deckId: ID!) {
+    resetDeck(deckId: $deckId) {
       deckId
       status
     }
@@ -25,8 +25,8 @@ export const RESET_DECK = graphql(`
 `)
 
 export const UPDATE_DECK = graphql(`
-  mutation UpdateDeck($userId: ID!, $deckId: ID!, $name: String!) {
-    updateDeck(userId: $userId, deckId: $deckId, name: $name) {
+  mutation UpdateDeck($deckId: ID!, $name: String!) {
+    updateDeck(deckId: $deckId, name: $name) {
       deckId
       name
       userId
@@ -38,9 +38,15 @@ export const UPDATE_DECK = graphql(`
   }
 `)
 
+export const DELETE_DECK = graphql(`
+  mutation DeleteDeck($deckId: ID!) {
+    deleteDeck(deckId: $deckId)
+  }
+`)
+
 export const CREATE_DECK = graphql(`
-  mutation CreateDeck($userId: ID!, $name: String!) {
-    createDeck(userId: $userId, name: $name) {
+  mutation CreateDeck($name: String!) {
+    createDeck(name: $name) {
       deckId
       name
       userId

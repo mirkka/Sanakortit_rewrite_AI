@@ -114,3 +114,57 @@ This information is derived from average weight of the cards in the deck:
 Most cards good - good
 Most cards medium - medium
 Most cards hard - hard
+
+## Styling UI
+Design guidelines:
+- create Ant Design theme if applicable
+- use css modules (sass) if adding custom css
+- application will be primarily used on mobile phone, secondary on tablet
+- prefer light, warm colors
+- no need for fancy transitions or animations except for loaders
+- avoid borders for form input fields. Use just underline
+- no need to think about accessibility
+- add cat somewhere
+
+Deck list page:
+- most prominent information is deck name, status and start study/restart study action buttons. Other actions are secondary, so the buttons do not have to be so prominent. Deck items should be styled as cards, not as table.
+- use infinite scroll instead of pagination
+
+Study view
+- in initial state most prominent information is the text. Flip card button should be easily accessible on mobile phone using just one hand. 
+- in flipped state, most prominent is the translation text. Difficulty rating buttons should be easily accessible on mobile phone using just one hand. These are the most prominent actions. Other actions (finish study, edit card) are less prominent.
+
+## Styling edits
+- add line between text and translation text in the study view
+- Difficulty rating buttons should further apart. I have sausage fingers and will most likely miss-click. You can also make them bigger.
+- also disable all buttons while there is a request in flight. App is very slow locally, and it's bad UX that I do not know what's going on after I clicked the button. User also might click the button multiple times while initial requst is being processed. This may cause serious bugs.
+- cat icon looks like hamster. Pls use more cat like icon
+- change date format to d.m yyyy and add label Last studied
+- change Edit to Edit deck
+- use Ant Design icon component instead of emojis
+- change difficulty rating buttons colors - Done - white, Good - green
+- use <Spin indicator={<LoadingOutlined spin />} size="large" /> for loader animation. Center loader in the middle of the page.
+
+## Infrastructure
+1. AWS deployment setup
+2. website hosting in S3
+- there is a registered domain cicushik.com in Route 53. Application URL should be - cicushik.com/sanakortit
+
+## Access management
+1. Set up AWS Cognito - Sign in and import customer user data with OAuth 2.0 social sign in with Google
+2. Add Sign in page for non-authenticated users, with above mentioned OAuth 2.0 social sign-in options Google
+3. Replace currenlty hardcoded userId with identity (ID) token
+- token expiration is 1 day
+- make sure all api return user specific content from DB, meaning only decks and cards that belong to the current user
+- make sure non-authenticated user can't see or use any queries or mutations
+- non-authenticated users should be automatically redirected to sign-in page
+
+
+## UI tweaks
+- remove labels and required asterisk from add card form. 
+- "Add" button should be disabled until both fields are filled
+- update title "Add Card" in add card form to include deck name -> Add card to deck <deck name>
+- remove sign out button and make user email clickable. After clicking the name, dropdown opens with one option to sign out
+- remove Edit Deck title from edit deck form
+- remove labels and required asterisk from edit deck form. "Save" button should be disabled if field is empty
+- same for new deck form - remove tile, labels and and "Create" button is disabled when field is empty. Also change placeholder text to "Deck name - e.g. Finnish vocabulary"

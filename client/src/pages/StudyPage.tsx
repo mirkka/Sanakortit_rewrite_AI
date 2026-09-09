@@ -1,10 +1,10 @@
+import { LoadingOutlined } from '@ant-design/icons'
 import { useMutation, useQuery } from '@apollo/client/react'
 import { Spin } from 'antd'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import StudyCard from '../components/StudyCard'
-import { CURRENT_USER_ID } from '../constants/user'
 import { GET_CARDS_FOR_DECK, MARK_CARD_DIFFICULTY } from '../graphql/card'
 import { GET_DECKS } from '../graphql/deck'
 import { pickWeightedCard } from '../services/studyService'
@@ -25,11 +25,11 @@ const StudyPage: React.FC = () => {
   const isFinished = cards.length > 0 && remainingCards.length === 0
 
   const { data, loading, error } = useQuery(GET_CARDS_FOR_DECK, {
-    variables: { userId: CURRENT_USER_ID, deckId: deckId! },
+    variables: { deckId: deckId! },
   })
 
-  const [markDifficulty] = useMutation(MARK_CARD_DIFFICULTY, {
-    refetchQueries: [{ query: GET_DECKS, variables: { userId: CURRENT_USER_ID } }],
+  const [markDifficulty, { loading: mutationLoading }] = useMutation(MARK_CARD_DIFFICULTY, {
+    refetchQueries: [{ query: GET_DECKS }],
   })
 
   useEffect(() => {
@@ -49,7 +49,11 @@ const StudyPage: React.FC = () => {
     return () => clearTimeout(timer)
   }, [isFinished, navigate])
 
-  if (loading) return <Spin />
+  if (loading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100dvh' }}>
+      <Spin indicator={<LoadingOutlined spin />} size="large" />
+    </div>
+  )
   if (error) return <p>Error loading cards: {error.message}</p>
 
   const handleDifficulty = async (weight: number) => {
@@ -60,7 +64,7 @@ const StudyPage: React.FC = () => {
       .filter((c) => c.weight > 0)
 
     await markDifficulty({
-      variables: { userId: CURRENT_USER_ID, deckId: deckId!, cardId: currentCard.cardId, weight },
+      variables: { deckId: deckId!, cardId: currentCard.cardId, weight },
     })
     dispatch(updateCardWeight({ cardId: currentCard.cardId, weight }))
 
@@ -73,6 +77,7 @@ const StudyPage: React.FC = () => {
       textTranslation={currentCard?.textTranslation ?? ''}
       isFlipped={isFlipped}
       isFinished={isFinished}
+      loading={mutationLoading}
       onFlip={() => dispatch(flipCard())}
       onDifficulty={handleDifficulty}
       onFinish={() => navigate('/')}

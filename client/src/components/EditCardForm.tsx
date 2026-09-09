@@ -1,5 +1,6 @@
 import { Button, Form, Input } from 'antd'
 import React from 'react'
+import * as formStyles from '../styles/forms.module.scss'
 
 interface Props {
   initialText: string
@@ -15,22 +16,26 @@ const EditCardForm: React.FC<Props> = ({ initialText, initialTextTranslation, on
   }
 
   return (
-    <Form
-      onFinish={handleFinish}
-      layout="vertical"
-      initialValues={{ text: initialText, textTranslation: initialTextTranslation }}
-    >
-      <Form.Item name="text" label="Text" rules={[{ required: true, message: 'Please enter the text' }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="textTranslation" label="Translation" rules={[{ required: true, message: 'Please enter the translation' }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item>
-        <Button onClick={onCancel} style={{ marginRight: 8 }}>Cancel</Button>
-        <Button type="primary" htmlType="submit" loading={loading}>OK</Button>
-      </Form.Item>
-    </Form>
+    <div className={formStyles.page}>
+      <p className={formStyles.pageTitle}>Edit card</p>
+      <Form
+        onFinish={handleFinish}
+        layout="vertical"
+        initialValues={{ text: initialText, textTranslation: initialTextTranslation }}
+        className={`${formStyles.form} ${formStyles.defaultFont}`}
+      >
+        <Form.Item name="text" rules={[{ required: true, message: 'Please enter the word' }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item name="textTranslation" rules={[{ required: true, message: 'Please enter the translation' }]}>
+          <Input />
+        </Form.Item>
+        <div className={formStyles.actions}>
+          <Button onClick={onCancel}>Cancel</Button>
+          <Button type="primary" htmlType="submit" loading={loading}>Save</Button>
+        </div>
+      </Form>
+    </div>
   )
 }
 

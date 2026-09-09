@@ -1,8 +1,8 @@
 import { graphql } from '../generated/gql'
 
 export const ADD_CARD = graphql(`
-  mutation AddCard($userId: ID!, $deckId: ID!, $text: String!, $textTranslation: String!) {
-    addCard(userId: $userId, deckId: $deckId, text: $text, textTranslation: $textTranslation) {
+  mutation AddCard($deckId: ID!, $text: String!, $textTranslation: String!) {
+    addCard(deckId: $deckId, text: $text, textTranslation: $textTranslation) {
       cardId
       deckId
       text
@@ -15,8 +15,8 @@ export const ADD_CARD = graphql(`
 `)
 
 export const GET_CARDS_FOR_DECK = graphql(`
-  query GetCardsForDeck($userId: ID!, $deckId: ID!) {
-    getCardsForDeck(userId: $userId, deckId: $deckId) {
+  query GetCardsForDeck($deckId: ID!) {
+    getCardsForDeck(deckId: $deckId) {
       cardId
       deckId
       text
@@ -29,8 +29,8 @@ export const GET_CARDS_FOR_DECK = graphql(`
 `)
 
 export const UPDATE_CARD = graphql(`
-  mutation UpdateCard($userId: ID!, $deckId: ID!, $cardId: ID!, $text: String!, $textTranslation: String!) {
-    updateCard(userId: $userId, deckId: $deckId, cardId: $cardId, text: $text, textTranslation: $textTranslation) {
+  mutation UpdateCard($deckId: ID!, $cardId: ID!, $text: String!, $textTranslation: String!) {
+    updateCard(deckId: $deckId, cardId: $cardId, text: $text, textTranslation: $textTranslation) {
       cardId
       deckId
       text
@@ -43,8 +43,8 @@ export const UPDATE_CARD = graphql(`
 `)
 
 export const MARK_CARD_DIFFICULTY = graphql(`
-  mutation MarkCardDifficulty($userId: ID!, $deckId: ID!, $cardId: ID!, $weight: Int!) {
-    markCardDifficulty(userId: $userId, deckId: $deckId, cardId: $cardId, weight: $weight) {
+  mutation MarkCardDifficulty($deckId: ID!, $cardId: ID!, $weight: Int!) {
+    markCardDifficulty(deckId: $deckId, cardId: $cardId, weight: $weight) {
       cardId
       updatedAt
     }

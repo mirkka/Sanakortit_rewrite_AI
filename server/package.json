@@ -7,7 +7,7 @@
     "watch": "tsc -w",
     "cdk": "cdk",
     "synth": "cdk synth --quiet",
-    "synth:local": "cdk synth --quiet -c localDynamoEndpoint=http://dynamodb-local:8000",
+    "synth:local": "cdk synth SanakortitStack --quiet -c localDynamoEndpoint=http://dynamodb-local:8000",
     "deploy": "cdk deploy",
     "diff": "cdk diff",
     "watch:synth": "nodemon --watch src --ext ts,graphql --exec 'npm run synth:local && sam local start-api -t cdk.out/SanakortitStack.template.json --port 4000 --docker-network sanakortit-local'",

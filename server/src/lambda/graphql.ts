@@ -9,7 +9,11 @@ import { typeDefs, resolvers } from './schema'
 
 const app = express()
 const server = new ApolloServer<GraphQLContext>({ typeDefs, resolvers })
-const serverlessApp = serverlessHttp(app)
+const serverlessApp = serverlessHttp(app, {
+  request: (request: express.Request, event: express.Request['event']) => {
+    request.event = event
+  },
+})
 
 let initialized = false
 

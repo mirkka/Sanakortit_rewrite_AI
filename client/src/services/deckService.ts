@@ -7,5 +7,5 @@ export const sortDecksAlphabetically = (decks: Deck[]): Deck[] =>
 
 export const formatLastStudied = (lastStudied: string | null): string => {
   if (!lastStudied) return '-'
-  return DateTime.fromISO(lastStudied).toFormat('dd/MM/yyyy')
+  return DateTime.fromISO(lastStudied).toFormat('d.M.yyyy')
 }

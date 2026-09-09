@@ -28,7 +28,7 @@ const getCardOrThrow = async (
 }
 
 export const cardQueryResolvers: Pick<QueryResolvers, 'getCardsForDeck'> = {
-  getCardsForDeck: async (_, { userId, deckId }, { dynamodb }) => {
+  getCardsForDeck: async (_, { deckId }, { dynamodb, userId }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
 
     const items: Array<{ cardId: string; deckId: string; text: string; textTranslation: string; weight: number; createdAt: string; updatedAt: string }> = []
@@ -54,7 +54,7 @@ export const cardQueryResolvers: Pick<QueryResolvers, 'getCardsForDeck'> = {
 }
 
 export const cardMutationResolvers: Pick<MutationResolvers, 'addCard' | 'deleteCard' | 'updateCard' | 'markCardDifficulty'> = {
-  addCard: async (_, { userId, deckId, text, textTranslation }, { dynamodb }) => {
+  addCard: async (_, { deckId, text, textTranslation }, { dynamodb, userId }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
 
     const cardId = uuidv4()
@@ -71,7 +71,7 @@ export const cardMutationResolvers: Pick<MutationResolvers, 'addCard' | 'deleteC
     return { cardId, deckId, text, textTranslation, weight, createdAt: now, updatedAt: now }
   },
 
-  deleteCard: async (_, { userId, deckId, cardId }, { dynamodb }) => {
+  deleteCard: async (_, { deckId, cardId }, { dynamodb, userId }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
     await getCardOrThrow(dynamodb, deckId, cardId)
 
@@ -85,7 +85,7 @@ export const cardMutationResolvers: Pick<MutationResolvers, 'addCard' | 'deleteC
     return cardId
   },
 
-  markCardDifficulty: async (_, { userId, deckId, cardId, weight }, { dynamodb }) => {
+  markCardDifficulty: async (_, { deckId, cardId, weight }, { dynamodb, userId }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
     const existing = await getCardOrThrow(dynamodb, deckId, cardId)
 
@@ -111,7 +111,7 @@ export const cardMutationResolvers: Pick<MutationResolvers, 'addCard' | 'deleteC
     }
   },
 
-  updateCard: async (_, { userId, deckId, cardId, text, textTranslation }, { dynamodb }) => {
+  updateCard: async (_, { deckId, cardId, text, textTranslation }, { dynamodb, userId }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
     const existing = await getCardOrThrow(dynamodb, deckId, cardId)
 

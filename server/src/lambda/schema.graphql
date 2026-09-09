@@ -20,18 +20,18 @@ type Card {
 }
 
 type Query {
-  getDecks(userId: ID!): [Deck!]!
-  getDeck(userId: ID!, deckId: ID!): Deck!
-  getCardsForDeck(userId: ID!, deckId: ID!): [Card!]!
+  getDecks: [Deck!]!
+  getDeck(deckId: ID!): Deck!
+  getCardsForDeck(deckId: ID!): [Card!]!
 }
 
 type Mutation {
-  createDeck(userId: ID!, name: String!): Deck!
-  updateDeck(userId: ID!, deckId: ID!, name: String!): Deck!
-  resetDeck(userId: ID!, deckId: ID!): Deck!
-  addCard(userId: ID!, deckId: ID!, text: String!, textTranslation: String!): Card!
-  deleteDeck(userId: ID!, deckId: ID!): ID!
-  deleteCard(userId: ID!, deckId: ID!, cardId: ID!): ID!
-  updateCard(userId: ID!, deckId: ID!, cardId: ID!, text: String!, textTranslation: String!): Card!
-  markCardDifficulty(userId: ID!, deckId: ID!, cardId: ID!, weight: Int!): Card!
+  createDeck(name: String!): Deck!
+  updateDeck(deckId: ID!, name: String!): Deck!
+  resetDeck(deckId: ID!): Deck!
+  addCard(deckId: ID!, text: String!, textTranslation: String!): Card!
+  deleteDeck(deckId: ID!): ID!
+  deleteCard(deckId: ID!, cardId: ID!): ID!
+  updateCard(deckId: ID!, cardId: ID!, text: String!, textTranslation: String!): Card!
+  markCardDifficulty(deckId: ID!, cardId: ID!, weight: Int!): Card!
 }

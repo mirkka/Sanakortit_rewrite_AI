@@ -1,0 +1,67 @@
+@use '../styles/variables.scss' as *;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 32px;
+}
+
+.card {
+  background: $color-bg;
+  border-radius: $radius;
+  border: 1px solid $color-border;
+  padding: 20px;
+  box-shadow: 0 2px 2px rgba(44, 36, 23, 0.07);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.deckName {
+  font-size: 18px;
+  font-weight: 700;
+  color: $color-text;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.meta {
+  font-size: 13px;
+  color: $color-text-secondary;
+  margin-bottom: 20px;
+}
+
+.studyButton {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.secondaryActions {
+  display: flex;
+  gap: 8px;
+}
+
+.addButton {
+  margin-top: 32px;
+  width: 100%;
+}
+
+.statusTag {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  border: 1px solid transparent;
+}
+
+.statusFinished { background: $color-bg; border-color: $color-border; color: $color-text; }
+.statusGood     { background: $bg-status-good; border-color:$color-border; color: $color-text; }
+.statusMedium   { background: $bg-status-medium; border-color:$color-border; color: $color-text; }
+.statusHard     { background: $bg-status-hard; border-color: $color-border; color: $color-text; }

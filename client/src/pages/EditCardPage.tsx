@@ -3,7 +3,6 @@ import { Spin } from 'antd'
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import EditCardForm from '../components/EditCardForm'
-import { CURRENT_USER_ID } from '../constants/user'
 import { GET_CARDS_FOR_DECK, UPDATE_CARD } from '../graphql/card'
 
 const EditCardPage: React.FC = () => {
@@ -12,11 +11,11 @@ const EditCardPage: React.FC = () => {
   const backToStudy = () => navigate(`/study/${deckId}`)
 
   const { data, loading: queryLoading } = useQuery(GET_CARDS_FOR_DECK, {
-    variables: { userId: CURRENT_USER_ID, deckId: deckId! },
+    variables: { deckId: deckId! },
   })
 
   const [updateCard, { loading: mutationLoading }] = useMutation(UPDATE_CARD, {
-    refetchQueries: [{ query: GET_CARDS_FOR_DECK, variables: { userId: CURRENT_USER_ID, deckId: deckId! } }],
+    refetchQueries: [{ query: GET_CARDS_FOR_DECK, variables: { deckId: deckId! } }],
     awaitRefetchQueries: true,
   })
 
@@ -26,7 +25,7 @@ const EditCardPage: React.FC = () => {
   if (!card) return <p>Card not found</p>
 
   const handleSubmit = async (text: string, textTranslation: string) => {
-    await updateCard({ variables: { userId: CURRENT_USER_ID, deckId: deckId!, cardId: cardId!, text, textTranslation } })
+    await updateCard({ variables: { deckId: deckId!, cardId: cardId!, text, textTranslation } })
     backToStudy()
   }
 

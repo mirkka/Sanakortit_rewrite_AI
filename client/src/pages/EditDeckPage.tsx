@@ -3,7 +3,6 @@ import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import EditDeckForm from '../components/EditDeckForm'
-import { CURRENT_USER_ID } from '../constants/user'
 import { GET_DECKS, UPDATE_DECK } from '../graphql/deck'
 import { selectDecks } from '../store/deckSlice'
 
@@ -16,14 +15,14 @@ const EditDeckPage: React.FC = () => {
   const deck = decks.find((d) => d.deckId === deckId)
 
   const [updateDeck, { loading }] = useMutation(UPDATE_DECK, {
-    refetchQueries: [{ query: GET_DECKS, variables: { userId: CURRENT_USER_ID } }],
+    refetchQueries: [{ query: GET_DECKS }],
     awaitRefetchQueries: true,
   })
 
   if (!deck) return <p>Deck not found</p>
 
   const handleSubmit = async (name: string) => {
-    await updateDeck({ variables: { userId: CURRENT_USER_ID, deckId: deckId!, name } })
+    await updateDeck({ variables: { deckId: deckId!, name } })
     backToList()
   }
 

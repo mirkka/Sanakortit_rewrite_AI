@@ -1,0 +1,44 @@
+@use 'variables' as *;
+
+.page {
+  padding-top: 12px;
+}
+
+.defaultFont {
+  :global(.ant-input) {
+    font-family: $font-default !important;
+
+    &::placeholder {
+      font-family: $font-card !important;
+    }
+  }
+}
+
+.pageTitle {
+  font-size: 20px;
+  font-weight: 500;
+  color: $color-text;
+  margin: 0 0 32px;
+  display: flex;
+  gap: 6px;
+}
+
+.deckName {
+  font-weight: 700;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+
+  button {
+    flex: 1;
+  }
+}

@@ -94,8 +94,7 @@ const deleteAllCardsForDeck = async (dynamodb: DynamoDBDocumentClient, deckId: s
 }
 
 export const deckQueryResolvers: Pick<QueryResolvers, 'getDecks' | 'getDeck'> = {
-  getDecks: async (_, { userId }, { dynamodb }) => {
-    console.log(dynamodb, 'dynamodb')
+  getDecks: async (_, __, { dynamodb, userId }) => {
     const result = await dynamodb.send(
       new QueryCommand({
         TableName: 'sanakortit-decks',
@@ -113,7 +112,7 @@ export const deckQueryResolvers: Pick<QueryResolvers, 'getDecks' | 'getDeck'> = 
     }>
   },
 
-  getDeck: async (_, { userId, deckId }, { dynamodb }) => {
+  getDeck: async (_, { deckId }, { dynamodb, userId }) => {
     const item = await getDeckOrThrow(dynamodb, deckId, userId)
     const stats = await getCardStats(dynamodb, deckId)
 
@@ -122,7 +121,7 @@ export const deckQueryResolvers: Pick<QueryResolvers, 'getDecks' | 'getDeck'> = 
 }
 
 export const deckMutationResolvers: Pick<MutationResolvers, 'createDeck' | 'updateDeck' | 'resetDeck' | 'deleteDeck'> = {
-  createDeck: async (_, { userId, name }, { dynamodb }) => {
+  createDeck: async (_, { name }, { dynamodb, userId }) => {
     const deckId = uuidv4()
     const now = new Date().toISOString()
 
@@ -136,7 +135,7 @@ export const deckMutationResolvers: Pick<MutationResolvers, 'createDeck' | 'upda
     return { deckId, name, userId, createdAt: now, updatedAt: now, lastStudied: null, numberOfCards: 0, status: null }
   },
 
-  updateDeck: async (_, { userId, deckId, name }, { dynamodb }) => {
+  updateDeck: async (_, { deckId, name }, { dynamodb, userId }) => {
     const existing = await getDeckOrThrow(dynamodb, deckId, userId)
     const updatedAt = new Date().toISOString()
 
@@ -154,7 +153,7 @@ export const deckMutationResolvers: Pick<MutationResolvers, 'createDeck' | 'upda
     return { deckId, name, userId, createdAt: existing.createdAt as string, updatedAt, ...stats }
   },
 
-  resetDeck: async (_, { userId, deckId }, { dynamodb }) => {
+  resetDeck: async (_, { deckId }, { dynamodb, userId }) => {
     const existing = await getDeckOrThrow(dynamodb, deckId, userId)
 
     let lastKey: Record<string, unknown> | undefined
@@ -200,7 +199,7 @@ export const deckMutationResolvers: Pick<MutationResolvers, 'createDeck' | 'upda
     }
   },
 
-  deleteDeck: async (_, { userId, deckId }, { dynamodb }) => {
+  deleteDeck: async (_, { deckId }, { dynamodb, userId }) => {
     await getDeckOrThrow(dynamodb, deckId, userId)
     await deleteAllCardsForDeck(dynamodb, deckId)
 
