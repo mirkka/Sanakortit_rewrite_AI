@@ -9,6 +9,10 @@ client/   # frontend application
 server/   # backend application
 ```
 
+## Infrastructure
+
+![Sanakortit AWS infrastructure](docs/aws-infrastructure.png)
+
 ## Development
 
 ### Prerequisites
